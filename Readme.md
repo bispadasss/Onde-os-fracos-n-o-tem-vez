@@ -81,23 +81,7 @@ quiz-ranking/
 
 ---
 
-## 🚀 Como Executar
 
-O procedimento abaixo pressupõe que o projeto seja executado localmente com PHP.
-
-1. Instale o PHP ou utilize um ambiente de desenvolvimento que já o inclua.
-2. Baixe ou clone este repositório.
-3. Abra o terminal na pasta do projeto.
-4. Inicie o servidor de desenvolvimento com o comando:
-   ```bash
-   php -S localhost:8000
-   ```
-5. Abra o navegador e acesse:
-   `http://localhost:8000`
-
-> **Observação:** Os comandos e caminhos deverão ser ajustados caso a estrutura final do projeto seja diferente.
-
----
 
 ## 📊 Sistema de Ranking
 
