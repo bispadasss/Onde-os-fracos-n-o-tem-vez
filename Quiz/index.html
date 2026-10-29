@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZ! — Aprenda jogando</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ============ VARIÁVEIS E RESET ============ */
+  :root {
+    --preto:        #0b0b0d;
+    --preto-2:      #131316;
+    --preto-3:      #1b1b1f;
+    --amarelo:      #FFD60A;
+    --amarelo-2:    #FFC300;
+    --amarelo-3:    #f5a623;
+    --cinza-texto:  #b9b9c0;
+    --branco:       #ffffff;
+    --raio:         18px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--preto);
+    color: var(--branco);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Brilhos amarelos ao fundo */
+  body::before, body::after {
+    content: "";
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: .14;
+    z-index: 0;
+    pointer-events: none;
+  }
+  body::before { background: var(--amarelo); top: -150px; right: -100px; }
+  body::after  { background: var(--amarelo-3); bottom: -200px; left: -150px; }
+
+  /* ============ FORMAS DECORATIVAS FLUTUANTES ============ */
+  .shape {
+    position: fixed;
+    z-index: 0;
+    opacity: .5;
+    animation: flutuar 7s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .shape.triangulo {
+    width: 0; height: 0;
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-bottom: 38px solid var(--amarelo);
+    top: 22%; left: 6%;
+  }
+  .shape.circulo {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--amarelo);
+    top: 68%; left: 4%;
+    animation-delay: 1.5s;
+  }
+  .shape.quadrado {
+    width: 30px; height: 30px;
+    background: transparent;
+    border: 5px solid var(--amarelo);
+    border-radius: 6px;
+    transform: rotate(20deg);
+    top: 16%; right: 8%;
+    animation-delay: 3s;
+  }
+  .shape.losango {
+    width: 26px; height: 26px;
+    background: var(--amarelo);
+    transform: rotate(45deg);
+    border-radius: 4px;
+    top: 75%; right: 6%;
+    animation-delay: 2s;
+  }
+
+  @keyframes flutuar {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -25px; }
+  }
+
+  /* ============ CABEÇALHO ============ */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 6%;
+    background: rgba(11, 11, 13, .75);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #222226;
+  }
+
+  .logo {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: var(--branco);
+    text-decoration: none;
+    letter-spacing: -1px;
+  }
+  .logo span { color: var(--amarelo); }
+
+  nav { display: flex; gap: 34px; }
+
+  nav a {
+    color: var(--cinza-texto);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .95rem;
+    position: relative;
+    transition: color .25s;
+  }
+  nav a:hover { color: var(--amarelo); }
+  nav a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -6px;
+    width: 0; height: 3px;
+    border-radius: 3px;
+    background: var(--amarelo);
+    transition: width .3s;
+  }
+  nav a:hover::after { width: 100%; }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: .95rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .btn-amarelo {
+    background: var(--amarelo);
+    color: var(--preto);
+    box-shadow: 0 0 0 rgba(255, 214, 10, 0);
+  }
+  .btn-amarelo:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(255, 214, 10, .35);
+  }
+  .btn-contorno {
+    border: 2px solid var(--amarelo);
+    color: var(--amarelo);
+    background: transparent;
+  }
+  .btn-contorno:hover {
+    background: var(--amarelo);
+    color: var(--preto);
+    transform: translateY(-3px);
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    gap: 60px;
+    padding: 90px 6% 110px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(255, 214, 10, .1);
+    border: 1px solid rgba(255, 214, 10, .4);
+    color: var(--amarelo);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 22px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--amarelo);
+    position: relative;
+  }
+  .hero h1 em::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 4px;
+    width: 100%; height: 10px;
+    background: rgba(255, 214, 10, .25);
+    z-index: -1;
+    border-radius: 4px;
+  }
+
+  .hero p {
+    color: var(--cinza-texto);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 36px;
+  }
+
+  .hero-botoes { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  /* ============ CARTÃO DE QUIZ (prévia) ============ */
+  .quiz-card {
+    background: var(--preto-2);
+    border: 1px solid #26262b;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, .6);
+    animation: subir 1s ease both;
+  }
+  @keyframes subir {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .quiz-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+  .quiz-topo .tempo {
+    background: var(--amarelo);
+    color: var(--preto);
+    font-weight: 900;
+    padding: 8px 20px;
+    border-radius: 12px;
+    animation: pulsar 1.2s ease-in-out infinite;
+  }
+  @keyframes pulsar {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.08); }
+  }
+  .quiz-topo .pergunta-num {
+    color: var(--cinza-texto);
+    font-weight: 600;
+    font-size: .9rem;
+  }
+
+  .quiz-card h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 24px;
+    min-height: 60px;
+  }
+
+  .opcoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .opcao {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border-radius: var(--raio);
+    font-weight: 800;
+    color: var(--preto);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .opcao:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 28px rgba(255, 214, 10, .25);
+  }
+  .opcao .icone {
+    font-size: 1.3rem;
+    display: grid;
+    place-items: center;
+    width: 34px; height: 34px;
+    background: rgba(0, 0, 0, .18);
+    border-radius: 10px;
+  }
+  .opcao.cor-1 { background: var(--amarelo); }
+  .opcao.cor-2 { background: var(--amarelo-2); }
+  .opcao.cor-3 { background: var(--amarelo-3); color: var(--preto); }
+  .opcao.cor-4 { background: var(--branco); }
+
+  /* ============ ESTATÍSTICAS ============ */
+  .stats {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    padding: 40px 6% 70px;
+  }
+  .stat { text-align: center; }
+  .stat strong {
+    display: block;
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: var(--amarelo);
+  }
+  .stat span {
+    color: var(--cinza-texto);
+    font-size: .95rem;
+    font-weight: 600;
+  }
+
+  /* ============ COMO FUNCIONA ============ */
+  .como {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 6% 100px;
+    text-align: center;
+  }
+  .como h2 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+  .como h2 span { color: var(--amarelo); }
+  .como > p {
+    color: var(--cinza-texto);
+    margin-bottom: 50px;
+  }
+  .passos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .passo {
+    background: var(--preto-2);
+    border: 1px solid #26262b;
+    border-radius: 22px;
+    padding: 40px 28px;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .passo:hover {
+    transform: translateY(-8px);
+    border-color: var(--amarelo);
+    box-shadow: 0 20px 50px rgba(255, 214, 10, .12);
+  }
+  .passo .num {
+    display: grid;
+    place-items: center;
+    width: 56px; height: 56px;
+    margin: 0 auto 20px;
+    border-radius: 16px;
+    background: var(--amarelo);
+    color: var(--preto);
+    font-size: 1.5rem;
+    font-weight: 900;
+    transform: rotate(-6deg);
+  }
+  .passo h3 { margin-bottom: 10px; font-size: 1.15rem; }
+  .passo p  { color: var(--cinza-texto); font-size: .95rem; line-height: 1.6; }
+
+  /* ============ CTA FINAL ============ */
+  .cta {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0 6% 110px;
+  }
+  .cta h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    margin-bottom: 30px;
+  }
+  .cta h2 span { color: var(--amarelo); }
+
+  /* ============ RODAPÉ ============ */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid #222226;
+    padding: 28px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    background: var(--preto-2);
+  }
+  footer p { color: var(--cinza-texto); font-size: .85rem; }
+  footer nav { gap: 22px; }
+  footer nav a { font-size: .85rem; }
+
+  /* ============ RESPONSIVO ============ */
+  @media (max-width: 960px) {
+    nav { display: none; }
+    .hero { grid-template-columns: 1fr; text-align: center; padding-top: 60px; }
+    .hero p { margin-inline: auto; }
+    .hero-botoes { justify-content: center; }
+    .passos { grid-template-columns: 1fr; }
+    .stats { gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Formas decorativas -->
+  <div class="shape triangulo"></div>
+  <div class="shape circulo"></div>
+  <div class="shape quadrado"></div>
+  <div class="shape losango"></div>
+
+  <!-- CABEÇALHO -->
+  <header>
+    <a class="logo" href="#">BIZARU?<span>!</span></a>
+    <nav>
+     <a href="index.html">Início</a>
+     <a href="catalogo.php">Quizzes</a>
+     <a href="criar_quiz.php">Criar quiz</a>
+     <a href="#">Ranking</a>
+  </nav>
+    <a class="btn btn-amarelo" href="#">Entrar</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <span class="tag">★ O jogo de perguntas nº 1</span>
+      <h1>Aprenda <em>jogando</em> com quizzes incríveis!</h1>
+      <p>Crie seu próprio quiz em minutos ou junte-se a milhões de jogadores no maior palco de perguntas e respostas do mundo. Tudo de graça, direto do navegador.</p>
+      <div class="hero-botoes">
+    <a class="btn btn-amarelo" href="catalogo.php">▶ Jogar agora</a>
+    <a class="btn btn-contorno" href="criar_quiz.php">Criar meu quiz</a>
+</div>
+    </div>
+
+    <!-- Prévia de um quiz -->
+    <div class="quiz-card">
+      <div class="quiz-topo">
+        <span class="pergunta-num">Pergunta 3 de 10</span>
+        <span class="tempo">15s</span>
+      </div>
+      <h2>Qual é a capital do Brasil?</h2>
+      <div class="opcoes">
+        <div class="opcao cor-1"><span class="icone">▲</span> Brasília</div>
+        <div class="opcao cor-2"><span class="icone">◆</span> São Paulo</div>
+        <div class="opcao cor-3"><span class="icone">●</span> Rio de Janeiro</div>
+        <div class="opcao cor-4"><span class="icone">■</span> Salvador</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTATÍSTICAS -->
+  <section class="stats">
+    <div class="stat"><strong>20</strong><span>jogadores por ano</span></div>
+    <div class="stat"><strong>100</strong><span>quizzes criados</span></div>
+    <div class="stat"><strong>1</strong><span>país alcançado</span></div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="como">
+    <h2>Como <span>funciona?</span></h2>
+    <p>Comece a jogar em três passos simples.</p>
+    <div class="passos">
+      <div class="passo">
+        <div class="num">1</div>
+        <h3>Crie ou escolha</h3>
+        <p>Monte seu próprio quiz ou explore milhares de quizzes públicos sobre qualquer assunto.</p>
+      </div>
+      <div class="passo">
+        <div class="num">2</div>
+        <h3>Convide a galera</h3>
+        <p>Compartilhe o código da sala e reúna amigos, alunos ou colegas em segundos.</p>
+      </div>
+      <div class="passo">
+        <div class="num">3</div>
+        <h3>Jogue e vença</h3>
+        <p>Responda rápido, acumule pontos e dispute o topo do ranking em tempo real!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta">
+    <h2>Pronto para se tornar o <span>campeão?</span></h2>
+    <a class="btn btn-amarelo" href="#">Criar minha conta grátis</a>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer>
+    <p>© 2025 QUIZ! — Todos os direitos reservados.</p>
+    <nav>
+      <a href="#">Termos</a>
+      <a href="#">Privacidade</a>
+      <a href="#">Contato</a>
+    </nav>
+  </footer>
+
+</body>
+</html>
